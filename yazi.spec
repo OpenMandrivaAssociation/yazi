@@ -1,7 +1,7 @@
 %global debug_package %{nil}
 
 Name:		yazi
-Version:	25.4.8
+Version:	25.5.28
 Release:	1
 Source0:	https://github.com/sxyazi/yazi/archive/v%{version}/%{name}-%{version}.tar.gz
 Source1:	%{name}-%{version}-vendor.tar.gz
