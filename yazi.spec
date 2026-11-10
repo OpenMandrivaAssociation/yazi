@@ -1,32 +1,28 @@
 %global debug_package %{nil}
 
 Name:		yazi
-Version:	26.5.6
+Version:	26.9.1
 Release:	1
 Source0:	https://github.com/sxyazi/yazi/archive/v%{version}/%{name}-%{version}.tar.gz
-Source1:	%{name}-%{version}-vendor.tar.gz
+Source1:	%{name}-%{version}-vendor.tar.xz
 Summary:	Blazing fast terminal file manager written in Rust, based on async I/O.
 URL:		https://github.com/sxyazi/yazi
 License:	MIT
 Group:		Application/File Manager
 
 BuildRequires:	cargo
+BuildRequires:	rust-packaging
 BuildRequires:	make
+
 %description
-Yazi (means "duck") is a terminal file manager written in Rust, based on non-blocking async I/O. It aims to provide an efficient, user-friendly, and customizable file management experience.
+Yazi (means "duck") is a terminal file manager written in Rust, based on 
+non-blocking async I/O. It aims to provide an efficient, user-friendly,
+ and customizable file management experience.
 
 %prep
 %autosetup -p1
 tar -zxf %{SOURCE1}
-mkdir -p .cargo
-cat >> .cargo/config.toml << EOF
-[source.crates-io]
-replace-with = "vendored-sources"
-
-[source.vendored-sources]
-directory = "vendor"
-
-EOF
+%cargo_prep -v vendor
 
 %build
 cargo build --frozen --release
@@ -40,8 +36,7 @@ install -Dpm 0755 -t %{buildroot}%{_bindir} target/release/yazi target/release/y
 %endif
 
 %files
-%license LICENSE
-%license LICENSE-ICONS
+%license LICENSE LICENSE-ICONS
 %doc README.md
 %{_bindir}/ya
 %{_bindir}/yazi
