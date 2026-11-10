@@ -22,7 +22,19 @@ non-blocking async I/O. It aims to provide an efficient, user-friendly,
 %prep
 %autosetup -p1
 tar -zxf %{SOURCE1}
-%cargo_prep -v vendor
+mkdir -p .cargo
+cat >> .cargo/config.toml << EOF
+[source.crates-io]
+replace-with = "vendored-sources"
+
+[source."git+https://github.com/yazi-rs/ratatui.git?branch=fix_buffer_diff_wide_cells"]
+git = "https://github.com/yazi-rs/ratatui.git"
+branch = "fix_buffer_diff_wide_cells"
+replace-with = "vendored-sources"
+
+[source.vendored-sources]
+directory = "vendor"
+EOF
 
 %build
 cargo build --frozen --release
